@@ -11,5 +11,7 @@ sealed class TasksEvent {
     object ShowSettings: TasksEvent()
     data class NavigateToEditTask(val id: String): TasksEvent()
     object NavigateToNewTask: TasksEvent()
+    object CreateRoom: TasksEvent()
+    object JoinTheRoom: TasksEvent()
     object SignOut: TasksEvent()
 }

@@ -39,10 +39,11 @@ class AuthViewModel @Inject constructor(
     private fun launchAuthentication(login: String, password: String) {
         viewModelScope.launch {
             val loginRequest = LoginRequest(login, password)
-            if (repository.signIn(loginRequest).accessToken != "") {
+            val request = repository.signIn(loginRequest)
+            if (request.accessToken.isNotEmpty()) {
                 _uiEvent.send(AuthEvent.AuthSuccess)
             } else {
-                _uiEvent.send(AuthEvent.AuthError)
+                _uiEvent.send(AuthEvent.AuthError(request.refreshToken.token))
             }
         }
     }
@@ -50,10 +51,11 @@ class AuthViewModel @Inject constructor(
     private fun launchRegistration(login: String, password: String) {
         viewModelScope.launch {
             val loginRequest = LoginRequest(login, password)
-            if (repository.signIn(loginRequest).accessToken != "") {
+            val request = repository.signIn(loginRequest)
+            if (request.accessToken.isNotEmpty()) {
                 _uiEvent.send(AuthEvent.AuthSuccess)
             } else {
-                _uiEvent.send(AuthEvent.AuthError)
+                _uiEvent.send(AuthEvent.AuthError(request.refreshToken.token))
             }
         }
     }

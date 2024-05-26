@@ -28,6 +28,8 @@ fun TasksUiEventHandler(
     onAction: (TasksAction) -> Unit,
     onEditTask: (String) -> Unit,
     onSignOut: () -> Unit,
+    onCreateRoom: () -> Unit,
+    onJoinRoom: () -> Unit,
     snackbarHostState: SnackbarHostState,
     sheetState: ModalBottomSheetState
 ) {
@@ -78,6 +80,8 @@ fun TasksUiEventHandler(
                         sheetState.show()
                 }
                 is TasksEvent.NavigateToEditTask -> onEditTask(it.id)
+                is TasksEvent.CreateRoom -> onCreateRoom()
+                is TasksEvent.JoinTheRoom -> onJoinRoom()
                 TasksEvent.NavigateToNewTask -> onCreateTask()
                 TasksEvent.SignOut -> onSignOut()
             }

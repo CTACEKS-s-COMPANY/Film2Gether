@@ -2,10 +2,11 @@ package com.ctaceks.auth.data
 
 import com.ctaceks.auth.data.di.AuthProviderScope
 import com.ctaceks.auth.data.remote.AuthService
+import com.ctaceks.auth.data.remote.extensions.toDataLayer
+import com.ctaceks.auth.data.remote.extensions.toDomainLayer
 import com.ctaceks.auth.domain.AuthInfoMutableProvider
 import com.ctaceks.auth.domain.AuthRepository
 import com.ctaceks.auth.domain.model.LoginRequest
-import com.ctaceks.auth.domain.model.RefreshToken
 import com.ctaceks.auth.domain.model.TokenPair
 import com.ctaceks.settings.domain.settings.AppSettingsMutableProvider
 import javax.inject.Inject
@@ -21,27 +22,13 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override suspend fun signIn(loginRequest: LoginRequest): TokenPair {
-        val tokenPairDto = authService.authLoginPost(loginRequest)
-        val tokenPair = TokenPair(
-            tokenPairDto.accessToken,
-            RefreshToken(
-                tokenPairDto.refreshToken.token,
-                tokenPairDto.refreshToken.expiresAt
-            )
-        )
+        val tokenPair = authService.authLoginPost(loginRequest.toDomainLayer()).toDataLayer()
         authProvider.updateAuthInfo(tokenPair)
         return tokenPair
     }
 
-    override suspend fun signUn(loginRequest: LoginRequest): TokenPair {
-        val tokenPairDto = authService.authRegisterPost(loginRequest)
-        val tokenPair = TokenPair(
-            tokenPairDto.accessToken,
-            RefreshToken(
-                tokenPairDto.refreshToken.token,
-                tokenPairDto.refreshToken.expiresAt
-            )
-        )
+    override suspend fun signUp(loginRequest: LoginRequest): TokenPair {
+        val tokenPair = authService.authRegisterPost(loginRequest.toDomainLayer()).toDataLayer()
         authProvider.updateAuthInfo(tokenPair)
         return tokenPair
     }

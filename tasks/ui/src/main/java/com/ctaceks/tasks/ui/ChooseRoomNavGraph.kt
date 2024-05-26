@@ -26,6 +26,7 @@ fun NavController.navigateToTasks() {
 fun NavGraphBuilder.tasksScreen(
     onNavigateToCreateTask: () -> Unit,
     onNavigateToEditTask: (String) -> Unit,
+    onNavigateToCreateRoom: () -> Unit,
     onSignOut: () -> Unit
 ) {
     composable(TasksScreenRoutePattern) {
@@ -41,7 +42,9 @@ fun NavGraphBuilder.tasksScreen(
             onAction = viewModel::onAction,
             onCreateTask = onNavigateToCreateTask,
             onEditTask = onNavigateToEditTask,
-            onSignOut = onSignOut
+            onSignOut = onSignOut,
+            onCreateRoom = onNavigateToCreateRoom,
+            onJoinRoom = onNavigateToCreateRoom
         )
     }
 }

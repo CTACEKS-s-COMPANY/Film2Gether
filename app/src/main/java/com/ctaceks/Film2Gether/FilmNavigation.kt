@@ -42,7 +42,8 @@ fun FilmNavigation(authProvider: AuthInfoProvider) {
             tasksScreen(
                 onNavigateToCreateTask = navController::navigateToTaskEdit,
                 onNavigateToEditTask = navController::navigateToTaskEdit,
-                onSignOut = navController::navigateToAuth
+                onSignOut = navController::navigateToTaskEdit,
+                onNavigateToCreateRoom = navController::navigateToTaskEdit
             )
             taskEditScreen(
                 onNavigateUp = navController::navigateUp,

@@ -1,13 +1,13 @@
 package com.ctaceks.tasks.ui
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -18,11 +18,15 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ctaceks.core.ui.components.ButtonComponent
+import com.ctaceks.core.ui.components.TextInputComponent
 import com.ctaceks.core.ui.components.TodoBottomSheetLayout
 import com.ctaceks.core.ui.theme.Blue
 import com.ctaceks.core.ui.theme.ExtendedTheme
@@ -30,12 +34,9 @@ import com.ctaceks.core.ui.theme.TodoAppTheme
 import com.ctaceks.tasks.domain.model.Priority
 import com.ctaceks.tasks.domain.model.TodoItem
 import com.ctaceks.tasks.ui.components.SettingsBottomSheetContent
-import com.ctaceks.tasks.ui.components.TasksFloatingActionButton
-import com.ctaceks.tasks.ui.components.TasksItem
 import com.ctaceks.tasks.ui.components.TasksTopAppBar
 import com.ctaceks.tasks.ui.components.TasksUiEventHandler
 import com.ctaceks.tasks.ui.components.pullRefresh.PullRefreshIndicator
-import com.ctaceks.tasks.ui.components.pullRefresh.pullRefresh
 import com.ctaceks.tasks.ui.components.pullRefresh.rememberPullRefreshState
 import com.ctaceks.tasks.ui.model.TasksAction
 import com.ctaceks.tasks.ui.model.TasksEvent
@@ -54,16 +55,16 @@ fun TasksScreen(
     uiEvent: Flow<TasksEvent>,
     onAction: (TasksAction) -> Unit,
     onCreateTask: () -> Unit,
+    onCreateRoom: () -> Unit,
+    onJoinRoom: () -> Unit,
     onEditTask: (String) -> Unit,
     onSignOut: () -> Unit
 ) {
     val listState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = uiState.isRefreshing,
-        onRefresh = { onAction(TasksAction.RefreshTasks) }
-    )
+    val pullRefreshState = rememberPullRefreshState(refreshing = uiState.isRefreshing,
+        onRefresh = { onAction(TasksAction.RefreshTasks) })
 
     TasksUiEventHandler(
         uiEvent = uiEvent,
@@ -72,6 +73,8 @@ fun TasksScreen(
         onEditTask = onEditTask,
         onSignOut = onSignOut,
         snackbarHostState = snackbarHostState,
+        onCreateRoom = onCreateRoom,
+        onJoinRoom = onJoinRoom,
         sheetState = sheetState
     )
 
@@ -84,48 +87,60 @@ fun TasksScreen(
         sheetState = sheetState,
     ) {
         val topBarElevation by animateDpAsState(
-            if (listState.canScrollBackward) 8.dp else 0.dp,
-            label = "top bar elevation"
+            if (listState.canScrollBackward) 8.dp else 0.dp, label = "top bar elevation"
         )
 
-        Scaffold(
-            topBar = {
-                TasksTopAppBar(uiState.doneVisible, topBarElevation, onAction)
-            },
-            snackbarHost = {
-                SnackbarHost(snackbarHostState) {
-                    Snackbar(
-                        snackbarData = it,
-                        actionColor = Blue
-                    )
-                }
-            },
-            floatingActionButton = {
-                TasksFloatingActionButton(onAction)
-            },
+        var roomId by remember { mutableStateOf("") }
+        var isRoomIdError by remember { mutableStateOf(false) }
+
+        Scaffold(topBar = {
+            TasksTopAppBar(uiState.doneVisible, topBarElevation, onAction)
+        }, snackbarHost = {
+            SnackbarHost(snackbarHostState) {
+                Snackbar(
+                    snackbarData = it, actionColor = Blue
+                )
+            }
+        },
             containerColor = ExtendedTheme.colors.backPrimary
         ) { paddingValues ->
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .pullRefresh(pullRefreshState)
+                    .fillMaxSize()
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    state = listState
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    items(uiState.tasks, key = { it.id }) {
-                        TasksItem(
-                            task = it,
-                            onAction = onAction
-                        )
+                    TextInputComponent(
+                        modifier = Modifier,
+                        value = roomId,
+                        updateValue = { roomId = it },
+                        updateIsContainerError = { isRoomIdError = it },
+                        isContainerError = isRoomIdError,
+                        label = "Room id",
+                        placeholder = "P0P4N3gr4"
+                    )
+                    ButtonComponent(
+                        modifier = Modifier,
+                        title = "Join the room"
+                    ) {
+                        if (roomId.isEmpty()) {
+                            isRoomIdError = true
+                        } else {
+                            onAction(TasksAction.JoinTheRoom(roomId))
+                        }
                     }
-                    item {
-                        Spacer(modifier = Modifier.height(96.dp))
+                    ButtonComponent(
+                        modifier = Modifier,
+                        title = "Create room"
+                    ) {
+                        onAction(TasksAction.CreateRoom)
                     }
+                    Spacer(modifier = Modifier.height(50.dp))
                 }
-
                 PullRefreshIndicator(
                     refreshing = uiState.isRefreshing,
                     state = pullRefreshState,
@@ -150,7 +165,9 @@ private fun Preview() {
             onAction = {},
             onCreateTask = {},
             onEditTask = {},
-            onSignOut = {}
+            onSignOut = {},
+            onCreateRoom = {},
+            onJoinRoom = {},
         )
     }
 }

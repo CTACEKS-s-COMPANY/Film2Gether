@@ -18,6 +18,6 @@ data class RefreshTokenDto(
 
 @Serializable
 data class LoginRequestDto(
-    val login: String,
-    val password: String,
+    @SerialName("login") val login: String,
+    @SerialName("password") val password: String,
 )

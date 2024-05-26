@@ -1,7 +1,7 @@
 package com.ctaceks.tasks.ui.di
 
 import com.ctaceks.core.di.FeatureScope
-import com.ctaceks.tasks.ui.TasksViewModel
+import com.ctaceks.tasks.ui.ChooseRoomViewModel
 import dagger.Subcomponent
 
 /**
@@ -16,7 +16,7 @@ interface TasksUiComponent {
         fun create(): TasksUiComponent
     }
 
-    fun getViewModel(): TasksViewModel
+    fun getViewModel(): ChooseRoomViewModel
 }
 
 interface TasksUiComponentProvider {

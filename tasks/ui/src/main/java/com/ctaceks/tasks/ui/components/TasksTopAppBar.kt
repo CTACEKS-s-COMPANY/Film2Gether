@@ -34,7 +34,7 @@ fun TasksTopAppBar(
             .shadow(elevation),
         title = {
             Text(
-                text = stringResource(id = R.string.my_tasks),
+                text = stringResource(id = com.ctaceks.core.ui.R.string.app_name),
                 style = ExtendedTheme.typography.title
             )
         },
@@ -51,7 +51,7 @@ fun TasksTopAppBar(
             }
         },
         actions = {
-            IconButton(
+/*            IconButton(
                 onClick = {
                     onAction(TasksAction.UpdateDoneVisibility(!doneVisible))
                 }
@@ -63,7 +63,7 @@ fun TasksTopAppBar(
                     ),
                     contentDescription = null,
                 )
-            }
+            }*/
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = ExtendedTheme.colors.backPrimary,

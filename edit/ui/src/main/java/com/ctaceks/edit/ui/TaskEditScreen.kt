@@ -1,6 +1,7 @@
 package com.ctaceks.edit.ui
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,43 +64,16 @@ fun TaskEditScreen(
 
         Scaffold(
             topBar = {
-                TaskEditTopAppBar(uiState.description, topBarElevation, onAction)
+//                TaskEditTopAppBar(uiState.description, topBarElevation, onAction)
             },
             containerColor = ExtendedTheme.colors.backPrimary
         ) { paddingValues ->
-
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
-                state = listState
             ) {
-                item {
-                    TaskEditTextField(
-                        description = uiState.description,
-                        onAction = onAction
-                    )
 
-                    TaskEditPriorityField(uiState.priority, onAction)
-
-                    TaskEditDivider(PaddingValues(horizontal = 16.dp))
-
-                    TaskEditTimeField(
-                        time = uiState.deadline,
-                        isDateVisible = uiState.isDeadlineVisible,
-                        onAction = onAction
-                    )
-
-                    TaskEditDivider(PaddingValues(top = 16.dp, bottom = 8.dp))
-
-                    TaskEditDeleteButton(
-                        enabled = uiState.isDeleteEnabled,
-                        onAction = onAction
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(96.dp))
-                }
             }
         }
     }

@@ -8,6 +8,6 @@ import com.ctaceks.auth.domain.model.TokenPair
  */
 interface AuthRepository {
     suspend fun signIn(loginRequest: LoginRequest): TokenPair
-    suspend fun signUn(loginRequest: LoginRequest): TokenPair
+    suspend fun signUp(loginRequest: LoginRequest): TokenPair
     suspend fun signOut()
 }

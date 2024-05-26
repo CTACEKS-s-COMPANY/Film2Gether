@@ -31,7 +31,7 @@ import javax.inject.Inject
  * Uses [TodoItemsRepository] for getting and editing [TodoItem]s
  */
 @FeatureScope
-class TasksViewModel @Inject constructor(
+class ChooseRoomViewModel @Inject constructor(
     private val authRepo: AuthRepository,
     private val todoRepo: TodoItemsRepository,
     private val settingsProvider: AppSettingsMutableProvider
@@ -60,6 +60,8 @@ class TasksViewModel @Inject constructor(
             is TasksAction.UpdateTheme -> updateTheme(action.theme)
             is TasksAction.UpdateRequest -> viewModelScope.launch(Dispatchers.IO) { todoRepo.updateTodoItems() }
             is TasksAction.RefreshTasks -> refreshTasks()
+            is TasksAction.CreateRoom -> createRoom()
+            is TasksAction.JoinTheRoom -> joinTheRoom()
             is TasksAction.SignOut -> signOut()
         }
     }
@@ -91,6 +93,18 @@ class TasksViewModel @Inject constructor(
     private fun editTask(item: TodoItem) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiEvent.send(TasksEvent.NavigateToEditTask(item.id))
+        }
+    }
+
+    private fun createRoom() {
+        viewModelScope.launch {
+            _uiEvent.send(TasksEvent.CreateRoom)
+        }
+    }
+
+    private fun joinTheRoom() {
+        viewModelScope.launch {
+            _uiEvent.send(TasksEvent.JoinTheRoom)
         }
     }
 

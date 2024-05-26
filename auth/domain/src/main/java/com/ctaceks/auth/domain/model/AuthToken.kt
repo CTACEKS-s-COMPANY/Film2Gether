@@ -11,6 +11,7 @@ data class RefreshToken(
     val expiresAt: Long,
 )
 
+
 data class LoginRequest(
     val login: String,
     val password: String,

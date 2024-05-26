@@ -3,15 +3,12 @@ package com.ctaceks.auth.ui
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,6 +30,8 @@ import com.ctaceks.auth.ui.model.AuthAction
 import com.ctaceks.auth.ui.model.AuthEvent
 import com.ctaceks.auth.ui.model.AuthUiState
 import com.ctaceks.core.ui.R.string.app_name
+import com.ctaceks.core.ui.components.ButtonComponent
+import com.ctaceks.core.ui.components.TextInputComponent
 import com.ctaceks.core.ui.theme.Blue
 import com.ctaceks.core.ui.theme.ExtendedTheme
 import com.ctaceks.core.ui.theme.TodoAppTheme
@@ -60,8 +59,8 @@ fun AuthScreen(
     LaunchedEffect(Unit) {
         uiEvent.collect {
             when (it) {
-                AuthEvent.AuthError -> {
-                    Toast.makeText(context, "Incorrect data", Toast.LENGTH_LONG).show()
+                is AuthEvent.AuthError -> {
+                    Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
                     isLoginError = true
                     isPasswordError = true
                 }
@@ -79,11 +78,9 @@ fun AuthScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(app_name),
-                        style = ExtendedTheme.typography.title
+                        text = stringResource(app_name), style = ExtendedTheme.typography.title
                     )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = ExtendedTheme.colors.backPrimary,
                     titleContentColor = ExtendedTheme.colors.labelPrimary,
                     actionIconContentColor = Blue
@@ -99,44 +96,33 @@ fun AuthScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            OutlinedTextField(
+            TextInputComponent(
+                modifier = Modifier,
                 value = login,
-                onValueChange = {
+                updateValue = {
                     login = it
                     isLoginError = false
                 },
-                isError = isLoginError,
-                label = { Text("Email") },
-                placeholder = { Text("example@gmail.com") },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(vertical = 8.dp),
-                shape = RoundedCornerShape(28),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = ExtendedTheme.colors.backSecondary,
-                    errorContainerColor = ExtendedTheme.colors.backElevated,
-                ),
+                isContainerError = isLoginError,
+                updateIsContainerError = { isLoginError = it },
+                label = "Login",
+                placeholder = "Mirea💩"
             )
-            OutlinedTextField(
+            TextInputComponent(
+                modifier = Modifier,
                 value = password,
-                onValueChange = {
+                updateValue = {
                     password = it
                     isPasswordError = false
                 },
-                isError = isPasswordError,
-                label = { Text("Password") },
-                placeholder = { Text("12345678") },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(vertical = 8.dp),
-                shape = RoundedCornerShape(28),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = ExtendedTheme.colors.backSecondary,
-                    errorContainerColor = ExtendedTheme.colors.backElevated
-                ),
+                isContainerError = isPasswordError,
+                updateIsContainerError = { isPasswordError = it },
+                label = "Password",
+                placeholder = "12345678"
             )
             ButtonComponent(
-                buttonTitle = stringResource(R.string.login_button_text),
+                modifier = Modifier,
+                title = stringResource(R.string.login_button_text),
                 onAction = {
                     if (login.isEmpty() || password.isEmpty()) {
                         if (login.isEmpty()) isLoginError = true
@@ -144,10 +130,10 @@ fun AuthScreen(
                     } else {
                         onAction(AuthAction.AuthRegister(login, password))
                     }
-                }
-            )
+                })
             ButtonComponent(
-                buttonTitle = stringResource(R.string.register_button_text),
+                modifier = Modifier,
+                title = stringResource(R.string.register_button_text),
                 onAction = {
                     if (login.isEmpty() || password.isEmpty()) {
                         if (login.isEmpty()) isLoginError = true
@@ -155,13 +141,12 @@ fun AuthScreen(
                     } else {
                         onAction(AuthAction.AuthRegister(login, password))
                     }
-                }
-            )
+                })
         }
     }
 }
 
-@Composable
+/*@Composable
 private fun ButtonComponent(
     buttonTitle: String,
     onAction: () -> Unit,
@@ -184,18 +169,13 @@ private fun ButtonComponent(
             color = ExtendedTheme.colors.labelPrimary
         )
     }
-}
+}*/
 
 
 @Preview
 @Composable
 private fun AuthScreenPreview() {
     TodoAppTheme {
-        AuthScreen(
-            uiState = AuthUiState(),
-            uiEvent = emptyFlow(),
-            onAction = {},
-            onSuccess = {}
-        )
+        AuthScreen(uiState = AuthUiState(), uiEvent = emptyFlow(), onAction = {}, onSuccess = {})
     }
 }

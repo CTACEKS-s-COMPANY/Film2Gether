@@ -62,10 +62,9 @@ class TasksService @Inject constructor(
         client.safeRequest { delete(id) { requestHeaders() } }
 
 
-    private fun HttpMessageBuilder.requestHeaders() {
+    fun HttpMessageBuilder.requestHeaders() {
         headers {
             append(AUTHORIZATION, "$OAuth ${auth.value.toString()}")
-            append(LAST_KNOWN_REVISION, auth.value.toString())
         }
     }
 }
