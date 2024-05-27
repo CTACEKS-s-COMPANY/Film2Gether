@@ -14,9 +14,9 @@ import com.ctaceks.core.ui.theme.ExtendedTheme
 
 @Composable
 fun ButtonComponent(
-    modifier: Modifier,
     title: String,
     onAction: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     OutlinedButton(
         onClick = onAction,

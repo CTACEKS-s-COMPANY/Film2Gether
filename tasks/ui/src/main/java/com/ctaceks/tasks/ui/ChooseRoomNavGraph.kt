@@ -24,8 +24,6 @@ fun NavController.navigateToTasks() {
  */
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.tasksScreen(
-    onNavigateToCreateTask: () -> Unit,
-    onNavigateToEditTask: (String) -> Unit,
     onNavigateToCreateRoom: () -> Unit,
     onSignOut: () -> Unit
 ) {
@@ -40,8 +38,6 @@ fun NavGraphBuilder.tasksScreen(
             uiState = uiState,
             uiEvent = viewModel.uiEvent,
             onAction = viewModel::onAction,
-            onCreateTask = onNavigateToCreateTask,
-            onEditTask = onNavigateToEditTask,
             onSignOut = onSignOut,
             onCreateRoom = onNavigateToCreateRoom,
             onJoinRoom = onNavigateToCreateRoom

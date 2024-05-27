@@ -1,4 +1,4 @@
-package com.ctaceks.edit.ui.components
+package com.ctaceks.edit.ui.roomBeforeStart.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

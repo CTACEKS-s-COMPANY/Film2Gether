@@ -4,13 +4,14 @@ import android.content.Context
 import com.ctaceks.auth.data.di.AuthProviderScope
 import com.ctaceks.auth.ui.di.AuthUiComponent
 import com.ctaceks.core.di.AppScope
-import com.ctaceks.edit.ui.di.EditUiComponent
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomBeforeStartUiComponent
 import com.ctaceks.other.alarm.di.AlarmComponent
 import com.ctaceks.other.work.di.SynchronizationWorkScope
 import com.ctaceks.other.work.di.WorkComponent
 import com.ctaceks.tasks.ui.di.TasksUiComponent
 import com.ctaceks.Film2Gether.MainActivity
 import com.ctaceks.Film2Gether.Film2GetherApplication
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomStartedUiComponent
 import dagger.BindsInstance
 import dagger.Component
 
@@ -34,8 +35,8 @@ interface AppComponent {
 
     fun authUiComponent(): AuthUiComponent.Factory
     fun tasksUiComponent(): TasksUiComponent.Factory
-    fun editUiComponent(): EditUiComponent.Factory
-
+    fun editUiComponent(): RoomBeforeStartUiComponent.Factory
+    fun roomStartedUiComponent(): RoomStartedUiComponent.Factory
     fun workComponent(): WorkComponent.Factory
     fun alarmComponent(): AlarmComponent.Factory
 }

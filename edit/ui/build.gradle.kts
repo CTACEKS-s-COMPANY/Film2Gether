@@ -17,5 +17,5 @@ dependencies {
     implementation(project(":settings:domain"))
 
     implementation(project(":tasks:domain"))
-
+    implementation("io.coil-kt:coil-compose:2.0.0")
 }

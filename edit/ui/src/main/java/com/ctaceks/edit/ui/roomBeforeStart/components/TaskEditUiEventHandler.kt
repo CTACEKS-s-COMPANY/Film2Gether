@@ -1,11 +1,11 @@
-package com.ctaceks.edit.ui.components
+package com.ctaceks.edit.ui.roomBeforeStart.components
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalFocusManager
-import com.ctaceks.edit.ui.model.TaskEditEvent
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditEvent
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -1,4 +1,4 @@
-package com.ctaceks.edit.ui.model
+package com.ctaceks.edit.ui.roomBeforeStart.model
 
 /**
  * Provides info for edit ui events

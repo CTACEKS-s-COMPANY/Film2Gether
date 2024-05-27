@@ -2,6 +2,8 @@ package com.ctaceks.tasks.ui.components
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -24,18 +26,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun TasksUiEventHandler(
     uiEvent: Flow<TasksEvent>,
-    onCreateTask: () -> Unit,
-    onAction: (TasksAction) -> Unit,
-    onEditTask: (String) -> Unit,
     onSignOut: () -> Unit,
     onCreateRoom: () -> Unit,
+    onAction: (TasksAction) -> Unit,
     onJoinRoom: () -> Unit,
     snackbarHostState: SnackbarHostState,
     sheetState: ModalBottomSheetState
 ) {
     val context = LocalContext.current
     var launchedBefore by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit) {
         if (!launchedBefore) {
             val workManager = WorkManager.getInstance(context)
             val workInfo = workManager
@@ -46,43 +46,17 @@ fun TasksUiEventHandler(
 
             launchedBefore = true
         }
-    }
+    }*/
 
     LaunchedEffect(Unit) {
         uiEvent.collect {
             when(it) {
-                TasksEvent.ConnectionError -> {
-                    launch {
-                        snackbarHostState.currentSnackbarData?.dismiss()
-                        snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.connection_error))
-
-                    }
-                }
-                TasksEvent.UndoNotification -> {
-                    launch {
-                        snackbarHostState.currentSnackbarData?.dismiss()
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.task_deleted),
-                            actionLabel = context.getString(R.string.undo),
-                            duration = SnackbarDuration.Short
-                        )
-                        when(snackbarResult) {
-                            SnackbarResult.Dismissed -> Unit
-                            SnackbarResult.ActionPerformed -> {
-                                onAction(TasksAction.UndoAction)
-                            }
-                        }
-                    }
-                }
                 TasksEvent.ShowSettings -> {
                     if (!sheetState.isVisible)
                         sheetState.show()
                 }
-                is TasksEvent.NavigateToEditTask -> onEditTask(it.id)
                 is TasksEvent.CreateRoom -> onCreateRoom()
                 is TasksEvent.JoinTheRoom -> onJoinRoom()
-                TasksEvent.NavigateToNewTask -> onCreateTask()
                 TasksEvent.SignOut -> onSignOut()
             }
         }

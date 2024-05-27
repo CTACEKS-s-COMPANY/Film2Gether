@@ -43,26 +43,16 @@ class ChooseRoomViewModel @Inject constructor(
         setupViewModel()
     }
 
-    private var lastDeleted = TodoItem(description = "dummy item")
-
     private val _uiEvent = Channel<TasksEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onAction(action: TasksAction) {
         when(action) {
-            is TasksAction.CreateTask -> viewModelScope.launch { _uiEvent.send(TasksEvent.NavigateToNewTask) }
-            is TasksAction.UpdateTask -> updateItem(action.todoItem)
-            is TasksAction.DeleteTask -> deleteItem(action.todoItem)
-            is TasksAction.EditTask -> editTask(action.todoItem)
-            is TasksAction.UpdateDoneVisibility -> updateDoneVisibility(action.visible)
-            is TasksAction.UndoAction -> returnTask()
             is TasksAction.ShowSettings -> viewModelScope.launch { _uiEvent.send(TasksEvent.ShowSettings) }
-            is TasksAction.UpdateTheme -> updateTheme(action.theme)
-            is TasksAction.UpdateRequest -> viewModelScope.launch(Dispatchers.IO) { todoRepo.updateTodoItems() }
-            is TasksAction.RefreshTasks -> refreshTasks()
             is TasksAction.CreateRoom -> createRoom()
             is TasksAction.JoinTheRoom -> joinTheRoom()
             is TasksAction.SignOut -> signOut()
+            is TasksAction.UpdateTheme -> updateTheme(action.theme)
         }
     }
 
@@ -90,12 +80,6 @@ class ChooseRoomViewModel @Inject constructor(
         }
     }
 
-    private fun editTask(item: TodoItem) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _uiEvent.send(TasksEvent.NavigateToEditTask(item.id))
-        }
-    }
-
     private fun createRoom() {
         viewModelScope.launch {
             _uiEvent.send(TasksEvent.CreateRoom)
@@ -108,45 +92,9 @@ class ChooseRoomViewModel @Inject constructor(
         }
     }
 
-    private fun updateItem(item: TodoItem) {
-        viewModelScope.launch(Dispatchers.IO) {
-            todoRepo.updateTodoItem(item)
-        }
-    }
-
-    private fun deleteItem(item: TodoItem) {
-        viewModelScope.launch(Dispatchers.IO) {
-            lastDeleted = item
-            todoRepo.deleteTodoItem(item)
-            _uiEvent.send(TasksEvent.UndoNotification)
-        }
-    }
-
-    private fun updateDoneVisibility(visible: Boolean) {
-        _uiState.update { uiState.value.copy(doneVisible = visible) }
-        viewModelScope.launch(Dispatchers.IO) {
-            todoRepo.updateDoneTodoItemsVisibility(visible)
-        }
-    }
-
-    private fun returnTask() {
-        viewModelScope.launch(Dispatchers.IO) {
-            todoRepo.addTodoItem(lastDeleted)
-        }
-    }
-
     private fun updateTheme(theme: Theme) {
         viewModelScope.launch {
             settingsProvider.updateTheme(theme)
-        }
-    }
-
-    private fun refreshTasks() {
-        viewModelScope.launch {
-            _uiState.update { uiState.value.copy(isRefreshing = true) }
-            if (!todoRepo.refreshTodoItems())
-                _uiEvent.send(TasksEvent.ConnectionError)
-            _uiState.update { uiState.value.copy(isRefreshing = false) }
         }
     }
 

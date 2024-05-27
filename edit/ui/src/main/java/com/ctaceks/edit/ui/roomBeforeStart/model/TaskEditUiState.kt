@@ -1,6 +1,6 @@
-package com.ctaceks.edit.ui.model
+package com.ctaceks.edit.ui.roomBeforeStart.model
 
-import com.ctaceks.edit.ui.utils.tomorrowLocalDateTime
+import com.ctaceks.edit.ui.roomBeforeStart.utils.tomorrowLocalDateTime
 import com.ctaceks.tasks.domain.model.Priority
 import java.time.LocalDateTime
 
@@ -13,7 +13,4 @@ data class TaskEditUiState(
     val deadline: LocalDateTime = tomorrowLocalDateTime,
     val isDeadlineVisible: Boolean = false,
     val isEditing: Boolean = false
-) {
-    val isDeleteEnabled: Boolean
-        get() = description.isNotBlank() || isEditing
-}
+)

@@ -54,23 +54,17 @@ fun TasksScreen(
     uiState: TasksUiState,
     uiEvent: Flow<TasksEvent>,
     onAction: (TasksAction) -> Unit,
-    onCreateTask: () -> Unit,
     onCreateRoom: () -> Unit,
     onJoinRoom: () -> Unit,
-    onEditTask: (String) -> Unit,
     onSignOut: () -> Unit
 ) {
     val listState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val pullRefreshState = rememberPullRefreshState(refreshing = uiState.isRefreshing,
-        onRefresh = { onAction(TasksAction.RefreshTasks) })
 
     TasksUiEventHandler(
         uiEvent = uiEvent,
-        onCreateTask = onCreateTask,
         onAction = onAction,
-        onEditTask = onEditTask,
         onSignOut = onSignOut,
         snackbarHostState = snackbarHostState,
         onCreateRoom = onCreateRoom,
@@ -141,11 +135,11 @@ fun TasksScreen(
                     }
                     Spacer(modifier = Modifier.height(50.dp))
                 }
-                PullRefreshIndicator(
+                /*PullRefreshIndicator(
                     refreshing = uiState.isRefreshing,
                     state = pullRefreshState,
                     modifier = Modifier.align(Alignment.TopCenter)
-                )
+                )*/
             }
         }
     }
@@ -163,8 +157,6 @@ private fun Preview() {
             uiState = TasksUiState(tasks = tasks),
             uiEvent = emptyFlow(),
             onAction = {},
-            onCreateTask = {},
-            onEditTask = {},
             onSignOut = {},
             onCreateRoom = {},
             onJoinRoom = {},

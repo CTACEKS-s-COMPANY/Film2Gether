@@ -12,8 +12,10 @@ import com.ctaceks.auth.ui.AuthScreenRoutePattern
 import com.ctaceks.auth.ui.authScreen
 import com.ctaceks.auth.ui.navigateToAuth
 import com.ctaceks.core.ui.theme.ExtendedTheme
-import com.ctaceks.edit.ui.navigateToTaskEdit
-import com.ctaceks.edit.ui.taskEditScreen
+import com.ctaceks.edit.ui.roomBeforeStart.navigateToRoomBeforeStart
+import com.ctaceks.edit.ui.roomBeforeStart.roomBeforeStartScreen
+import com.ctaceks.edit.ui.roomStarted.navigateToRoomStarted
+import com.ctaceks.edit.ui.roomStarted.roomStartedScreen
 import com.ctaceks.tasks.ui.TasksScreenRoutePattern
 import com.ctaceks.tasks.ui.navigateToTasks
 import com.ctaceks.tasks.ui.tasksScreen
@@ -40,14 +42,16 @@ fun FilmNavigation(authProvider: AuthInfoProvider) {
                 onSuccessAuth = navController::navigateToTasks
             )
             tasksScreen(
-                onNavigateToCreateTask = navController::navigateToTaskEdit,
-                onNavigateToEditTask = navController::navigateToTaskEdit,
                 onSignOut = navController::navigateToAuth,
-                onNavigateToCreateRoom = navController::navigateToTaskEdit
+                onNavigateToCreateRoom = navController::navigateToRoomBeforeStart
             )
-            taskEditScreen(
+            roomBeforeStartScreen(
+                onStartButton = navController::navigateToRoomStarted
+            )
+            roomStartedScreen(
                 onNavigateUp = navController::navigateUp,
-                onSuccessSave = navController::navigateUp
+                onSuccessSave = navController::navigateToTasks,
+                onEndButton = navController::navigateToTasks,
             )
         }
     }

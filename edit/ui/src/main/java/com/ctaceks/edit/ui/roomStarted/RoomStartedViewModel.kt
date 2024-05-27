@@ -1,13 +1,13 @@
-package com.ctaceks.edit.ui
+package com.ctaceks.edit.ui.roomStarted
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ctaceks.core.di.FeatureScope
-import com.ctaceks.edit.ui.model.TaskEditAction
-import com.ctaceks.edit.ui.model.TaskEditEvent
-import com.ctaceks.edit.ui.model.TaskEditUiState
-import com.ctaceks.edit.ui.utils.dateTimeFromLong
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditAction
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditEvent
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditUiState
+import com.ctaceks.edit.ui.roomBeforeStart.utils.dateTimeFromLong
 import com.ctaceks.tasks.domain.model.TodoItem
 import com.ctaceks.tasks.domain.repo.TodoItemsRepository
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import javax.inject.Inject
  * Uses [TodoItemsRepository] to work with task
  */
 @FeatureScope
-class TaskEditViewModel @Inject constructor(
+class RoomStartedViewModel @Inject constructor(
     private val repo: TodoItemsRepository
 ): ViewModel() {
     private var isEditing = false
@@ -40,27 +40,8 @@ class TaskEditViewModel @Inject constructor(
 
     fun onAction(action: TaskEditAction) {
         when(action) {
-            is TaskEditAction.DescriptionChange -> _uiState.update {
-                it.copy(description = action.description) }
-            is TaskEditAction.UpdateDeadlineVisibility -> _uiState.update {
-                it.copy(isDeadlineVisible = action.visible) }
-            is TaskEditAction.PriorityChoose -> viewModelScope.launch {
-                _uiEvent.send(TaskEditEvent.PriorityChoose) }
-            is TaskEditAction.UpdatePriority -> _uiState.update {
-                it.copy(priority = action.priority) }
-            is TaskEditAction.UpdateDate -> updateDate(action.date)
-            is TaskEditAction.UpdateTime -> updateTime(action.hour, action.minute, action.second)
-            TaskEditAction.SaveTask -> saveTask()
-            TaskEditAction.DeleteTask -> deleteTask()
             TaskEditAction.NavigateUp -> viewModelScope.launch {
                 _uiEvent.send(TaskEditEvent.NavigateBack) }
-        }
-    }
-
-    fun setupViewModel(arguments: Bundle?) {
-        val taskId: String? = arguments?.getString(TaskId)
-        taskId?.let {
-            setupTask(taskId)
         }
     }
 

@@ -7,8 +7,10 @@ import com.ctaceks.Film2Gether.di.AppComponent
 import com.ctaceks.Film2Gether.di.DaggerAppComponent
 import com.ctaceks.auth.ui.di.AuthUiComponent
 import com.ctaceks.auth.ui.di.AuthUiComponentProvider
-import com.ctaceks.edit.ui.di.EditUiComponent
-import com.ctaceks.edit.ui.di.EditUiComponentProvider
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomBeforeStartUiComponent
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomBeforeStartUiComponentProvider
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomStartedUiComponent
+import com.ctaceks.edit.ui.roomBeforeStart.di.RoomStartedUiComponentProvider
 import com.ctaceks.other.alarm.AlarmNotificationChannel
 import com.ctaceks.other.alarm.di.AlarmComponent
 import com.ctaceks.other.alarm.di.AlarmComponentProvider
@@ -31,7 +33,8 @@ import javax.inject.Inject
 class Film2GetherApplication : Application(), Configuration.Provider,
     AuthUiComponentProvider,
     TasksUiComponentProvider,
-    EditUiComponentProvider,
+    RoomBeforeStartUiComponentProvider,
+    RoomStartedUiComponentProvider,
     WorkComponentProvider,
     AlarmComponentProvider {
     lateinit var appComponent: AppComponent
@@ -62,7 +65,7 @@ class Film2GetherApplication : Application(), Configuration.Provider,
     override fun provideTasksUiComponent(): TasksUiComponent =
         appComponent.tasksUiComponent().create()
 
-    override fun provideEditUiComponent(): EditUiComponent =
+    override fun provideEditUiComponent(): RoomBeforeStartUiComponent =
         appComponent.editUiComponent().create()
 
     override fun provideWorkComponent(): WorkComponent =
@@ -70,4 +73,7 @@ class Film2GetherApplication : Application(), Configuration.Provider,
 
     override fun provideAlarmComponent(): AlarmComponent =
         appComponent.alarmComponent().create()
+
+    override fun provideRoomStartedUiComponent(): RoomStartedUiComponent =
+        appComponent.roomStartedUiComponent().create()
 }

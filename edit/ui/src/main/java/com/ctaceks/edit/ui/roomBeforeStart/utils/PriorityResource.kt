@@ -1,4 +1,4 @@
-package com.ctaceks.edit.ui.utils
+package com.ctaceks.edit.ui.roomBeforeStart.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

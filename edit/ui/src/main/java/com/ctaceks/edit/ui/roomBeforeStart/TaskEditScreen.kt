@@ -1,18 +1,18 @@
-package com.ctaceks.edit.ui
+package com.ctaceks.edit.ui.roomBeforeStart
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,17 +20,10 @@ import com.ctaceks.core.ui.components.TodoBottomSheetLayout
 import com.ctaceks.core.ui.components.rememberTodoBottomSheetState
 import com.ctaceks.core.ui.theme.ExtendedTheme
 import com.ctaceks.core.ui.theme.TodoAppTheme
-import com.ctaceks.edit.ui.components.PriorityBottomSheetContent
-import com.ctaceks.edit.ui.components.TaskEditDeleteButton
-import com.ctaceks.edit.ui.components.TaskEditDivider
-import com.ctaceks.edit.ui.components.TaskEditPriorityField
-import com.ctaceks.edit.ui.components.TaskEditTextField
-import com.ctaceks.edit.ui.components.TaskEditTimeField
-import com.ctaceks.edit.ui.components.TaskEditTopAppBar
-import com.ctaceks.edit.ui.components.TaskEditUiEventHandler
-import com.ctaceks.edit.ui.model.TaskEditAction
-import com.ctaceks.edit.ui.model.TaskEditEvent
-import com.ctaceks.edit.ui.model.TaskEditUiState
+import com.ctaceks.edit.ui.roomBeforeStart.components.TaskEditUiEventHandler
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditAction
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditEvent
+import com.ctaceks.edit.ui.roomBeforeStart.model.TaskEditUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -44,7 +37,8 @@ fun TaskEditScreen(
     uiEvent: Flow<TaskEditEvent>,
     onAction: (TaskEditAction) -> Unit,
     onNavigateUp: () -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    onStart: () -> Unit,
 ) {
     val listState = rememberLazyListState()
     val sheetState = rememberTodoBottomSheetState()
@@ -53,7 +47,7 @@ fun TaskEditScreen(
 
     TodoBottomSheetLayout(
         sheetContent = {
-            PriorityBottomSheetContent(uiState.priority, onAction)
+            
         },
         sheetState = sheetState
     ) {
@@ -63,17 +57,17 @@ fun TaskEditScreen(
         )
 
         Scaffold(
-            topBar = {
-//                TaskEditTopAppBar(uiState.description, topBarElevation, onAction)
-            },
             containerColor = ExtendedTheme.colors.backPrimary
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
-
+                Text("GOpa")
+                Button(onClick = onStart) { }
             }
         }
     }
@@ -88,7 +82,8 @@ private fun TaskEditScreenPreview() {
             uiEvent = emptyFlow(),
             onAction = {},
             onNavigateUp = {},
-            onSave = {}
+            onSave = {},
+            onStart = {}
         )
     }
 }
