@@ -36,8 +36,6 @@ import com.ctaceks.tasks.domain.model.TodoItem
 import com.ctaceks.tasks.ui.components.SettingsBottomSheetContent
 import com.ctaceks.tasks.ui.components.TasksTopAppBar
 import com.ctaceks.tasks.ui.components.TasksUiEventHandler
-import com.ctaceks.tasks.ui.components.pullRefresh.PullRefreshIndicator
-import com.ctaceks.tasks.ui.components.pullRefresh.rememberPullRefreshState
 import com.ctaceks.tasks.ui.model.TasksAction
 import com.ctaceks.tasks.ui.model.TasksEvent
 import com.ctaceks.tasks.ui.model.TasksUiState
@@ -119,20 +117,22 @@ fun TasksScreen(
                     )
                     ButtonComponent(
                         modifier = Modifier,
-                        title = "Join the room"
-                    ) {
-                        if (roomId.isEmpty()) {
-                            isRoomIdError = true
-                        } else {
-                            onAction(TasksAction.JoinTheRoom(roomId))
+                        title = "Join the room",
+                        onAction = {
+                            if (roomId.isEmpty()) {
+                                isRoomIdError = true
+                            } else {
+                                onAction(TasksAction.JoinTheRoom(roomId))
+                            }
                         }
-                    }
+                    )
                     ButtonComponent(
                         modifier = Modifier,
-                        title = "Create room"
-                    ) {
-                        onAction(TasksAction.CreateRoom)
-                    }
+                        title = "Create room",
+                        onAction = {
+                            onAction(TasksAction.CreateRoom)
+                        }
+                    )
                     Spacer(modifier = Modifier.height(50.dp))
                 }
                 /*PullRefreshIndicator(

@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 private val RainbowColors = listOf(Color.Cyan, Color.Red, Color.Magenta)
 
@@ -92,22 +94,34 @@ fun MoviesScreen(
         ) {
 
             if (isMoviesEmpty) {
-                Text(
-                    text = "Ничего не смогли вам подобрать",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .graphicsLayer(alpha = 0.99f)
-                        .drawWithCache {
-                            val brush = Brush.horizontalGradient(RainbowColors)
-                            onDrawWithContent {
-                                drawContent()
-                                drawRect(brush, blendMode = BlendMode.SrcAtop)
-                            }
-                        }
-                )
+                val random = Random.nextInt(from = 0, until = 2)
+                if (random == 0) {
+                    WeCantMatchText(
+                        modifier = Modifier.padding(
+                            horizontal = 20.dp
+                        )
+                    )
+                } else {
+                    val movie = movies.random()
+                    Column(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        Text(
+                            text = "Наиболее подходящий фильм:",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                        )
+                        MovieCard(
+                            imageUrl = movie.imageUrl,
+                            enName = movie.enName,
+                            ruName = movie.ruName,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp))
+                                .aspectRatio(0.75f)
+                        )
+                    }
+                }
             }
 
             // Карточка на заднем плане (появляющаяся)
@@ -133,6 +147,28 @@ fun MoviesScreen(
             }
         }
     }
+}
+
+@Composable
+private fun WeCantMatchText(
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = "Ничего не смогли вам подобрать",
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.headlineMedium,
+        fontWeight = FontWeight.Bold,
+        modifier = modifier
+            .graphicsLayer(alpha = 0.99f)
+            .drawWithCache {
+                val brush = Brush.horizontalGradient(RainbowColors)
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(brush, blendMode = BlendMode.SrcAtop)
+                }
+            }
+    )
 }
 
 @Composable
@@ -169,22 +205,20 @@ fun SwipeableMovieCard(
         targetValue = when {
             offsetX > 0 -> Color.Green.copy(alpha = minOf(1f, animatedOffsetX / maxWidth))
             offsetX < 0 -> Color.Red.copy(alpha = minOf(1f, -animatedOffsetX / maxWidth))
-            else -> MaterialTheme.colorScheme.secondaryContainer
+            else -> Color.Transparent
         }, label = ""
     )
 
     Box(
         modifier = modifier
             .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
+            .clip(RoundedCornerShape(16.dp))
             .graphicsLayer {
-                clip = true
-                shape = RoundedCornerShape(16.dp)
                 scaleX = animatedScale
                 scaleY = animatedScale
                 alpha = animatedAlpha
                 translationY = animatedTranslationY
             }
-            .background(backgroundColor)
             .aspectRatio(0.75f)
             .fillMaxWidth(0.9f)
             .draggable(
@@ -202,8 +236,25 @@ fun SwipeableMovieCard(
                 }
             )
     ) {
+        MovieCard(
+            imageUrl = movie.imageUrl,
+            enName = movie.enName,
+            ruName = movie.ruName,
+            modifier = Modifier.background(backgroundColor)
+        )
+    }
+}
+
+@Composable
+private fun MovieCard(
+    imageUrl: String,
+    enName: String,
+    ruName: String,
+    modifier: Modifier = Modifier
+){
+    Box(modifier = modifier) {
         SubcomposeAsyncImage(
-            model = movie.imageUrl,
+            model = imageUrl,
             loading = {
                 Box(contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -214,12 +265,13 @@ fun SwipeableMovieCard(
             modifier = Modifier.fillMaxSize()
         )
         MovieTitle(
-            title = movie.enName,
-            subTitle = movie.ruName,
+            title = enName,
+            subTitle = ruName,
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.BottomCenter)
         )
+        Box(modifier = modifier.fillMaxSize())
     }
 }
 
@@ -237,10 +289,12 @@ private fun MovieTitle(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
+            color = Color.White,
         )
         Text(
             text = subTitle,
             style = MaterialTheme.typography.bodyMedium,
+            color = Color.White,
         )
     }
 }
