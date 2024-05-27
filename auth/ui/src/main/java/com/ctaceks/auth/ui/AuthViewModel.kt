@@ -40,10 +40,11 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             val loginRequest = LoginRequest(login, password)
             val request = repository.signIn(loginRequest)
-            if (request.accessToken.isNotEmpty()) {
+            if (request != null) {
                 _uiEvent.send(AuthEvent.AuthSuccess)
             } else {
-                _uiEvent.send(AuthEvent.AuthError(request.refreshToken.token))
+                //Todo make normal error
+                _uiEvent.send(AuthEvent.AuthError("Something goes wrong"))
             }
         }
     }
@@ -51,11 +52,12 @@ class AuthViewModel @Inject constructor(
     private fun launchRegistration(login: String, password: String) {
         viewModelScope.launch {
             val loginRequest = LoginRequest(login, password)
-            val request = repository.signIn(loginRequest)
-            if (request.accessToken.isNotEmpty()) {
+            val request = repository.signUp(loginRequest)
+            if (request != null) {
                 _uiEvent.send(AuthEvent.AuthSuccess)
             } else {
-                _uiEvent.send(AuthEvent.AuthError(request.refreshToken.token))
+                //Todo make normal error
+                _uiEvent.send(AuthEvent.AuthError("Something goes wrong"))
             }
         }
     }

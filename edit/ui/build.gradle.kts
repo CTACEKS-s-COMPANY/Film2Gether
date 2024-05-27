@@ -11,5 +11,11 @@ dependencies {
     implementation(project(":core:di"))
     implementation(project(":core:ui"))
 
+    implementation(project(":core:data"))
+
+    implementation(project(":auth:domain"))
+    implementation(project(":settings:domain"))
+
     implementation(project(":tasks:domain"))
+
 }

@@ -1,7 +1,5 @@
 package com.ctaceks.core.data.di
 
-import com.ctaceks.core.data.NetworkConstants.BASE_URL
-import com.ctaceks.core.data.NetworkConstants.LIST
 import com.ctaceks.core.di.AppScope
 import dagger.Module
 import dagger.Provides
@@ -30,7 +28,6 @@ class NetworkModule {
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                url(BASE_URL + LIST)
             }
         }
     }

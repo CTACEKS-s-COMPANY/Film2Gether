@@ -4,8 +4,6 @@ package com.ctaceks.core.data
  * Constants used for network requests
  */
 object NetworkConstants {
-    const val BASE_URL = "http://158.160.91.75:8080"
-    const val LIST = "api/v1"
 
     const val GENERATE_FAILS = "X-Generate-Fails"
     const val LAST_KNOWN_REVISION = "X-Last-Known-Revision"

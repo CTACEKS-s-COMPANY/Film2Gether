@@ -128,7 +128,7 @@ fun AuthScreen(
                         if (login.isEmpty()) isLoginError = true
                         else isPasswordError = true
                     } else {
-                        onAction(AuthAction.AuthRegister(login, password))
+                        onAction(AuthAction.AuthLogin(login, password))
                     }
                 })
             ButtonComponent(

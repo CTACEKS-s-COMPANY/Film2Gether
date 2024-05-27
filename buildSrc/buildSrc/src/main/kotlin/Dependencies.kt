@@ -9,6 +9,7 @@ object Dependencies {
 
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2"
         const val immutableCollections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
+
         object Serialization {
             const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:$ver"
             const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
@@ -16,7 +17,8 @@ object Dependencies {
 
         object Ksp {
             private const val version = "1.8.21-1.0.11"
-            const val gradlePlugin = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:$version"
+            const val gradlePlugin =
+                "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:$version"
         }
     }
 
@@ -49,12 +51,14 @@ object Dependencies {
         const val material2 = "androidx.compose.material:material:$version"
         const val material3 = "androidx.compose.material3:material3:$material3Version"
         const val navigation = "androidx.navigation:navigation-compose:$navigationVersion"
-        const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-compose:$lifecycleRuntimeVersion"
+        const val lifecycleRuntime =
+            "androidx.lifecycle:lifecycle-runtime-compose:$lifecycleRuntimeVersion"
 
         object Accompanist {
             private const val version = "0.30.1"
 
-            const val navigationAnimation = "com.google.accompanist:accompanist-navigation-animation:$version"
+            const val navigationAnimation =
+                "com.google.accompanist:accompanist-navigation-animation:$version"
             const val permissions = "com.google.accompanist:accompanist-permissions:$version"
         }
     }
@@ -74,12 +78,16 @@ object Dependencies {
         const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:$version"
         const val serializationJson = "io.ktor:ktor-serialization-kotlinx-json:$version"
         const val slf4fNop = "org.slf4j:slf4j-nop:2.0.7"
+        const val websockets = "io.ktor:ktor-client-websockets:$version"
+        const val logging = "io.ktor:ktor-client-logging:$version"
+        const val loopback = "ch.qos.logback:logback-classic:1.2.6"
     }
 
     object Testing {
         const val junit4 = "junit:junit:4.13.2" //testImplementation
         const val junitAndroidExt = "androidx.test.ext:junit:1.1.5" //androidTestImplementation
-        const val espressoCore = "androidx.test.espresso:espresso-core:3.5.1" //androidTestImplementation
+        const val espressoCore =
+            "androidx.test.espresso:espresso-core:3.5.1" //androidTestImplementation
     }
 
     object Other {
@@ -89,7 +97,8 @@ object Dependencies {
 
         const val yandexAuthSdk = "com.yandex.android:authsdk:$yandexAuthSdkVersion"
         const val datastore = "androidx.datastore:datastore:$datastoreVersion"
-        const val preferencesDatastore = "androidx.datastore:datastore-preferences:$datastoreVersion"
+        const val preferencesDatastore =
+            "androidx.datastore:datastore-preferences:$datastoreVersion"
         const val workManager = "androidx.work:work-runtime-ktx:$workManagerVersion"
     }
 }

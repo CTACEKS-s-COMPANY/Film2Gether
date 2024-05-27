@@ -26,6 +26,9 @@ dependencies {
     implementation(Dependencies.Ktor.serializationJson)
     implementation(Dependencies.Ktor.contentNegotiation)
     implementation(Dependencies.Ktor.slf4fNop)
+    implementation(Dependencies.Ktor.websockets)
+    implementation(Dependencies.Ktor.logging)
+    implementation(Dependencies.Ktor.loopback)
 }
 
 kotlin {

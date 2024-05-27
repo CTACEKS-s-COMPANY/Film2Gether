@@ -21,7 +21,8 @@ enum class RequestError(val code: Int) {
     NOT_FOUND(404),
     SERVER(500),
     NO_CONNECTION(0),
-    UNKNOWN(0)
+    UNKNOWN(0),
+    METHOD_IS_NOT_ALLOWED(405),
 }
 
 /**
@@ -45,6 +46,7 @@ suspend inline fun <reified T> HttpResponse.result(): RequestResult<T> {
         return RequestResult.Success(body<T>())
 
     val error = when(status.value) {
+        405 -> RequestError.METHOD_IS_NOT_ALLOWED
         400 -> RequestError.REVISION
         401 -> RequestError.AUTH
         404 -> RequestError.NOT_FOUND

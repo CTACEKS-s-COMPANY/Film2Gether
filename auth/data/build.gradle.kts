@@ -13,6 +13,9 @@ dependencies {
     implementation(project(":auth:domain"))
     implementation(project(":settings:domain"))
 
+    implementation(Dependencies.Ktor.serializationJson)
+
     //Datastore
+    implementation(Dependencies.Kotlin.Serialization.json)
     implementation(Dependencies.Other.preferencesDatastore)
 }

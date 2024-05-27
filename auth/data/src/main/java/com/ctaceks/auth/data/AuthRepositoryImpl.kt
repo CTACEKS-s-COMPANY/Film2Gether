@@ -21,14 +21,20 @@ class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
 ) : AuthRepository {
 
-    override suspend fun signIn(loginRequest: LoginRequest): TokenPair {
+    override suspend fun signIn(loginRequest: LoginRequest): TokenPair? {
         val tokenPair = authService.authLoginPost(loginRequest.toDomainLayer()).toDataLayer()
+        if (tokenPair.accessToken.isEmpty()) {
+            return null
+        }
         authProvider.updateAuthInfo(tokenPair)
         return tokenPair
     }
 
-    override suspend fun signUp(loginRequest: LoginRequest): TokenPair {
+    override suspend fun signUp(loginRequest: LoginRequest): TokenPair? {
         val tokenPair = authService.authRegisterPost(loginRequest.toDomainLayer()).toDataLayer()
+        if (tokenPair.accessToken.isEmpty()) {
+            return null
+        }
         authProvider.updateAuthInfo(tokenPair)
         return tokenPair
     }
